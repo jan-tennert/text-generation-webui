@@ -32,13 +32,26 @@ RUN git clone https://git.ecker.tech/mrq/bitsandbytes-rocm.git repositories/bits
     # FIXME: mirror to github - git.ecker.tech server not reliable, frequently returns http 500
     cd repositories/bitsandbytes && \
     make hip && \
-    CUDA_VERSION=$(rocminfo | grep -oE "gfx.*" | grep -v gfx000 | sort -u -t 'x' -k 2n | tail -1) python setup.py install
+    CUDA_VERSION=gfx1030 python setup.py install
 
 RUN git clone https://github.com/WapaMario63/GPTQ-for-LLaMa-ROCm -b rocm repositories/GPTQ-for-LLaMa && \
     cd repositories/GPTQ-for-LLaMa && \
     python setup_rocm.py install
 
+RUN git clone https://github.com/abetlen/llama-cpp-python && \
+    cd llama-cpp-python && \
+    cd vendor && \
+    git clone https://github.com/ggerganov/llama.cpp.git && \
+    cd llama.cpp && \
+    curl -L https://github.com/ggerganov/llama.cpp/pull/1087.diff | git apply - && \
+    git checkout eb36362 -f && \
+    cd ../.. && \
+    pip install setuptools scikit-build cmake ninja && \
+    python3 setup.py develop
+
+
 RUN sed -i '/bitsandbytes/d' requirements.txt && \
+    sed -i '/llama-cpp-python/d' requirements.txt && \
     # delete bitsandbytes; we will use the ROCm version we just installed instead
     sed -i 's/^numpy.*/numpy==1.22.0/g' requirements.txt && \
     # pin numpy > 1.20 for panadas and matplotlib AND <123.0 for scipy compatibility
