@@ -23,7 +23,6 @@ services:
       - ../prompts:/app/prompts
       - ../softprompts:/app/softprompts
       - ../training:/app/training
-      - /llama-cpp-python:/home/jan/AI/textgen-llama/llama-cpp-python/
     deploy:
       resources:
         reservations:
@@ -55,7 +54,6 @@ services:
       - ../prompts:/app/prompts
       - ../softprompts:/app/softprompts
       - ../training:/app/training
-      - /llama-python:/home/jan/AI/textgen-llama/llama-cpp-python
     devices: # FIXME: Linux only device syntax
       - /dev/dri:/dev/dri
       - /dev/kfd:/dev/kfd
