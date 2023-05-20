@@ -41,10 +41,10 @@ RUN git clone https://github.com/WapaMario63/GPTQ-for-LLaMa-ROCm -b rocm reposit
 RUN git clone https://github.com/abetlen/llama-cpp-python && \
     cd llama-cpp-python && \
     cd vendor && \
-    git clone https://github.com/ggerganov/llama.cpp.git && \
+    git clone https://github.com/jan-tennert/llama.cpp && \
     cd llama.cpp && \
     curl -L https://github.com/ggerganov/llama.cpp/pull/1087.diff | git apply - && \
-    git checkout eb36362 -f && \
+#    git checkout eb36362 -f && \
     cd ../.. && \
     pip install setuptools scikit-build cmake ninja && \
     python3 setup.py develop
